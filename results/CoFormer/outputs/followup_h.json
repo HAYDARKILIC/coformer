@@ -1,0 +1,103 @@
+{
+ "sha256": "84f249584936c2a08fd561bfe4bf1345474ec3ef23336ab6c7392ecde44eea52",
+ "written_utc": "2026-10-01T05:43:51Z",
+ "plan": {
+  "version": "H-1",
+  "formulas": "the stored family-A gold clause matrices (training 20,000; ID 2,000; paraphrase 2,000 instances; 3-SAT, n = 16, m = 64, rejection-sampled for satisfiability), same instances in the same order; only the text is regenerated. No scale split (the 16-variable lexicon does not extend); the scale-based fields are set to NaN and not reported.",
+  "generator_sha256": "3b1aa78106f00a3c28fb7b832120fbb9d2d4fb43ed33ccf773f750cd2b6c62a1",
+  "language": "variable v = (entity v // 4, property v % 4); 3 aliases per entity and 3 synonyms per property; subject ellipsis for two positive literals of one entity (probability 0.5); polarity = parity of k stacked negations, k <= level, uniform over the admissible k, innermost negation as 'is not' with probability 0.5; negation scopes over the immediately following atom only; level - 1 leading distractor sub-clauses that mention variables outside the clause without asserting them",
+  "paraphrase_split": "clause frames and distractor frames disjoint from training, built only from training words (asserted); same negation operators",
+  "text_seeds": {
+   "train": "5100 + level",
+   "id": "5200 + level",
+   "paraphrase": "5300 + level"
+  },
+  "validation": "a symbolic parser recovers the gold clause from every sampled sentence (checked on 4,000 sentences per split at generation); no sentence is truncated (proven bound)",
+  "model_and_training": "as in the reported study (Translator, relaxed MaxSAT layer T = 50, K = 10, losses and schedule unchanged) except epochs = 24 (twice the calibrated budget) for every family-H run; the FINAL model is evaluated; learning curve of the ID excess on the first 512 ID instances every 6 epochs (reporting only)",
+  "pilot": {
+   "condition": "frozen",
+   "faith_fraction": 1.0,
+   "seed": 1000,
+   "levels": [
+    1,
+    2,
+    3
+   ],
+   "epochs": 24,
+   "rule": "share = faith_excess_id / (1 - g/2) with g = 3/16 (maximum 0.906). Select the LOWEST level with 0.20 <= share <= 0.95. If no level qualifies, select the HIGHEST level with share > 0.95; if there is none (all shares < 0.20), select level 1. The pilot seed is not used in any confirmatory test, and coformer is not run in the pilot, so the selection cannot depend on the contrast under test."
+  },
+  "designs": {
+   "H_full": {
+    "conditions": [
+     "coformer",
+     "frozen"
+    ],
+    "faith_fraction": 1.0,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   },
+   "H_scarce": {
+    "conditions": [
+     "coformer",
+     "frozen"
+    ],
+    "faith_fraction": 0.05,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   }
+  },
+  "confirmatory": {
+   "H_full": {
+    "a": "coformer",
+    "b": "frozen",
+    "direction": "greater",
+    "metric": "faith_excess_id",
+    "claim": "on the harder language with full per-slot supervision, routing the solver gradient improves ID excess"
+   },
+   "H_scarce": {
+    "a": "coformer",
+    "b": "frozen",
+    "direction": "greater",
+    "metric": "faith_excess_id",
+    "claim": "on the harder language with per-slot supervision on 5% of the training instances, routing the solver gradient improves ID excess"
+   }
+  },
+  "confirmatory_rule": "one-sided exact sign-flip permutation test on the per-seed differences (all 2^n sign patterns); Holm over {H_full, H_scarce} at alpha = 0.05; SUPPORTED iff Holm-adjusted p < 0.05 AND mean difference >= 0.03",
+  "testability": "a member is UNTESTABLE (ceiling) if the median frozen share is >= 0.95; it then gets no verdict, and the Holm family size stays 2",
+  "secondary": "no verdicts: faith_excess_paraphrase, csat_norm_id, csat_norm_paraphrase and the paraphrase retention csat_norm_paraphrase / csat_norm_id (mean difference, 95% t interval, exact two-sided sign-flip p); success indicator (faith_excess_id > 0.30) with exact one-sided McNemar and hurdle means; non-superiority (a benefit >= 0.03 is excluded iff the upper limit of the 90% t interval is < 0.03); 80% MDE",
+  "convergence_criterion": "reported, not used for any verdict: converged if, averaged over seeds, the ID excess on the first 512 ID instances changes by less than 0.02 between epochs 18 and 24 in both conditions",
+  "order": "pilot (levels 1, 2, 3), then for seed s = 0..15: H_full frozen, H_full coformer, and for s < 12 H_scarce frozen, H_scarce coformer",
+  "stage_flags": [
+   "RUN_FAMH"
+  ]
+ },
+ "generator_source": "\n# --- Family H generator (included verbatim in Cell 10j) ---------------------------------------\n# Same formula distribution as family A (uniform random 3-SAT, n = 16, m = 64, rejection-sampled\n# for satisfiability, identical generator and seeds); only the LANGUAGE changes. Each clause is\n# still one text segment, so the per-clause Translator and run_condition are reused unchanged.\n#\n# Difficulty mechanisms (level l = 1, 2, 3):\n#   * variable v = (entity v // 4, property v % 4); 3 aliases per entity, 3 synonyms per property,\n#     so the translator must map 9 surface forms onto each variable\n#   * subject ellipsis: two positive literals of the same entity -> \"E is P1 or P2\"\n#   * polarity = parity of the number k of stacked negations, k <= l (\"is not\" counts as one)\n#   * l - 1 distractor sub-clauses that MENTION other variables without asserting them\n# Paraphrase-OOD split: clause frames and distractor frames never seen in training, built only\n# from training words (asserted), so the shift is compositional, not lexical.\nimport numpy as np\n\nH_ENTITIES = [[\"alice\", \"the doctor\", \"the redhead\"],\n              [\"bob\", \"the pilot\", \"the drummer\"],\n              [\"carol\", \"the teacher\", \"the singer\"],\n              [\"dave\", \"the chef\", \"the painter\"]]\nH_PROPS = [[\"tired\", \"exhausted\", \"sleepy\"],\n           [\"happy\", \"cheerful\", \"glad\"],\n           [\"at home\", \"indoors\", \"inside\"],\n           [\"busy\", \"occupied\", \"working\"]]\nH_NVARS = len(H_ENTITIES) * len(H_PROPS)\nH_NEG = [\"it is false that\", \"nobody claims that\", \"it is untrue that\"]\nH_FRAMES_ID = [(\"either {L} .\", \" or \"), (\"at least one holds : {L} .\", \" or \"),\n               (\"{L} .\", \" or else \"), (\"we are told that {L} .\", \" or \")]\nH_FRAMES_OOD = [(\"we are told that either {L} .\", \" or else \"),\n                (\"at least one holds , we are told : {L} .\", \" or \")]\nH_DISTRACT_ID = [\"regardless of whether {A} ,\", \"even though nobody knows if {A} ,\",\n                 \"although it is unclear whether {A} ,\"]\nH_DISTRACT_OOD = [\"even though it is unclear whether {A} ,\", \"although nobody knows if {A} ,\"]\n\n\ndef _h_words(items):\n    out = set()\n    for it in items:\n        s = it[0] + \" \" + it[1] if isinstance(it, tuple) else it\n        out |= set(s.replace(\"{L}\", \" \").replace(\"{A}\", \" \").split())\n    return out\n\n\nH_WORDS_ID = (_h_words(H_FRAMES_ID) | _h_words(H_DISTRACT_ID) | _h_words(H_NEG)\n              | {w for al in H_ENTITIES + H_PROPS for a in al for w in a.split()} | {\"is\", \"not\", \"or\"})\nH_WORDS_OOD = _h_words(H_FRAMES_OOD) | _h_words(H_DISTRACT_OOD)\nassert H_WORDS_OOD <= H_WORDS_ID, f\"OOD frames add unseen words {sorted(H_WORDS_OOD - H_WORDS_ID)}\"\nassert not ({f for f, _ in H_FRAMES_OOD} & {f for f, _ in H_FRAMES_ID})\nassert not (set(H_DISTRACT_OOD) & set(H_DISTRACT_ID))\n\n\ndef _h_atom(v, rng, neg_copula=False):\n    e, p = divmod(int(v), len(H_PROPS))\n    E = H_ENTITIES[e][int(rng.integers(3))]\n    P = H_PROPS[p][int(rng.integers(3))]\n    return f\"{E} is not {P}\" if neg_copula else f\"{E} is {P}\"\n\n\ndef _h_literal(v, sign, level, rng):\n    \"\"\"Literal (v, sign) with k stacked negations, k <= level, k odd iff sign < 0.\"\"\"\n    ks = [k for k in range(level + 1) if (k % 2 == 1) == (sign < 0)]\n    k = int(ks[int(rng.integers(len(ks)))])\n    use_cop = k >= 1 and rng.random() < 0.5          # innermost negation as \"is not\"\n    s = _h_atom(v, rng, neg_copula=use_cop)\n    for _ in range(k - (1 if use_cop else 0)):\n        s = f\"{H_NEG[int(rng.integers(len(H_NEG)))]} {s}\"\n    return s\n\n\ndef verbalize_clause_H(row, *, level, rng, ood=False):\n    \"\"\"ONE clause row (n_vars,) in {-1,0,+1} -> ONE sentence (str).\"\"\"\n    lits = [(int(v), int(np.sign(row[v]))) for v in np.nonzero(row)[0]]\n    order = rng.permutation(len(lits)); lits = [lits[i] for i in order]\n    frames = H_FRAMES_OOD if ood else H_FRAMES_ID\n    tmpl, sep = frames[int(rng.integers(len(frames)))]\n    parts, i = [], 0\n    while i < len(lits):\n        v, s = lits[i]\n        j = next((j for j in range(i + 1, len(lits))\n                  if s > 0 and lits[j][1] > 0 and lits[j][0] // 4 == v // 4), None)\n        if j is not None and rng.random() < 0.5:     # subject ellipsis, positive literals only\n            v2 = lits.pop(j)[0]\n            E = H_ENTITIES[v // 4][int(rng.integers(3))]\n            parts.append(f\"{E} is {H_PROPS[v % 4][int(rng.integers(3))]} or \"\n                         f\"{H_PROPS[v2 % 4][int(rng.integers(3))]}\")\n        else:\n            parts.append(_h_literal(v, s, level, rng))\n        i += 1\n    body = tmpl.replace(\"{L}\", sep.join(parts))\n    n_d = level - 1\n    if n_d:\n        in_cl = {v for v, _ in lits} | {int(v) for v in np.nonzero(row)[0]}\n        pool = np.array([v for v in range(H_NVARS) if v not in in_cl])\n        dfr = H_DISTRACT_OOD if ood else H_DISTRACT_ID\n        pre = [dfr[int(rng.integers(len(dfr)))].replace(\n                   \"{A}\", _h_atom(int(v), rng, neg_copula=bool(rng.random() < 0.5)))\n               for v in rng.choice(pool, size=n_d, replace=False)]\n        body = \" \".join(pre) + \" \" + body\n    return body\n\n\ndef h_max_clause_tokens(level, clause_len=3):\n    \"\"\"Worst-case sentence length in words (a proven bound, so nothing is ever truncated).\"\"\"\n    fw = max(len(f.replace(\"{L}\", \" \").split()) for f, _ in H_FRAMES_ID + H_FRAMES_OOD)\n    sw = max(len(s.split()) for _, s in H_FRAMES_ID + H_FRAMES_OOD)\n    ew = max(len(a.split()) for al in H_ENTITIES for a in al)\n    pw = max(len(a.split()) for al in H_PROPS for a in al)\n    nw = max(len(n.split()) for n in H_NEG)\n    atom = ew + 2 + pw                                  # \"E is not P\"\n    lit = max(level * nw + atom - 1, (level - 1) * nw + atom)\n    ellip = ew + 1 + pw + 1 + pw                        # covers two literals\n    lits = clause_len * lit + (clause_len - 1) * sw\n    lits = max(lits, ellip + (clause_len - 2) * lit + (clause_len - 2) * sw)\n    dw = max(len(d.replace(\"{A}\", \" \").split()) for d in H_DISTRACT_ID + H_DISTRACT_OOD) + atom\n    return fw + lits + (level - 1) * dw\n\n\n# ---------------------------------------------------------------- reference parser (validation)\n_H_ENT = {tuple(a.split()): e for e, al in enumerate(H_ENTITIES) for a in al}\n_H_PRP = {tuple(a.split()): p for p, al in enumerate(H_PROPS) for a in al}\n_H_NEGT = [tuple(n.split()) for n in H_NEG]\n\n\ndef _h_match(w, i, table):\n    best = None\n    for ph, idx in table.items():\n        if tuple(w[i:i + len(ph)]) == ph and (best is None or len(ph) > len(best[0])):\n            best = (ph, idx)\n    return best\n\n\ndef parse_clause_H(text):\n    \"\"\"Symbolic inverse of verbalize_clause_H: sentence -> {var: sign}. Raises if not parseable.\n    Used only to PROVE that every sentence determines its clause uniquely.\"\"\"\n    w = text.split()\n    heads = sorted({tuple(d.split(\"{A}\")[0].split()) for d in H_DISTRACT_ID + H_DISTRACT_OOD},\n                   key=len, reverse=True)\n    i = 0\n    while True:                                         # leading distractors\n        h = next((h for h in heads if tuple(w[i:i + len(h)]) == h), None)\n        if h is None:\n            break\n        i = w.index(\",\", i) + 1\n    w = w[i:]\n    fr = sorted(H_FRAMES_ID + H_FRAMES_OOD, key=lambda f: -len(f[0].split(\"{L}\")[0].split()))\n    for f, _ in fr:\n        pre, post = (x.split() for x in f.split(\"{L}\"))\n        if tuple(w[:len(pre)]) == tuple(pre) and tuple(w[len(w) - len(post):]) == tuple(post):\n            w = w[len(pre):len(w) - len(post)]\n            break\n    else:\n        raise ValueError(f\"no frame: {text!r}\")\n    out, i, k = {}, 0, 0\n    while i < len(w):\n        if w[i] in (\"or\", \"else\") and k == 0:\n            i += 1; continue\n        n = next((n for n in _H_NEGT if tuple(w[i:i + len(n)]) == n), None)\n        if n:\n            k += 1; i += len(n); continue\n        m = _h_match(w, i, _H_ENT)\n        if m is None:\n            raise ValueError(f\"no entity at {' '.join(w[i:i + 4])!r} in {text!r}\")\n        i += len(m[0])\n        assert w[i] == \"is\", text; i += 1\n        if w[i] == \"not\":\n            k += 1; i += 1\n        mp = _h_match(w, i, _H_PRP); assert mp, text; i += len(mp[0])\n        v = 4 * m[1] + mp[1]; assert v not in out, text\n        out[v] = -1 if k % 2 else 1; k = 0\n        if i + 1 < len(w) and w[i] == \"or\" and _h_match(w, i + 1, _H_PRP):\n            mp2 = _h_match(w, i + 1, _H_PRP); v2 = 4 * m[1] + mp2[1]\n            assert v2 not in out, text\n            out[v2] = 1; i += 1 + len(mp2[0])\n    return out\n"
+}

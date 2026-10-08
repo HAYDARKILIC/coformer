@@ -1,0 +1,26 @@
+{
+ "0": {
+  "n_hold": 160,
+  "shared": 126,
+  "shared_proofwriter": 81,
+  "shared_folio": 45
+ },
+ "1": {
+  "n_hold": 160,
+  "shared": 111,
+  "shared_proofwriter": 77,
+  "shared_folio": 34
+ },
+ "2": {
+  "n_hold": 160,
+  "shared": 114,
+  "shared_proofwriter": 85,
+  "shared_folio": 29
+ },
+ "3": {
+  "n_hold": 160,
+  "shared": 119,
+  "shared_proofwriter": 78,
+  "shared_folio": 41
+ }
+}

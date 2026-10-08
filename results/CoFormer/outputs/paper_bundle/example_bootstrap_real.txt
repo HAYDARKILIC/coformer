@@ -1,0 +1,5 @@
+cluster_bootstrap seeds=(0, 1, 2, 3)
+CoFormer-no_stgs_vs_CoFormer-coformer: diff=-0.0016 CI=[-0.0094,0.0031] p=1.0000
+CoFormer-no_stgs_vs_DiLA-frozen: diff=-0.0984 CI=[-0.1532,-0.0437] p=0.0014
+CoFormer-coformer_vs_CoFormer-frozen: diff=0.0000 CI=[-0.0109,0.0109] p=1.0000
+CoFormer-coformer_vs_DiLA-frozen: diff=-0.0969 CI=[-0.1516,-0.0437] p=0.0014

@@ -1,0 +1,136 @@
+{
+ "sha256": "118c0051d4874c09bd195a8f194f4799eb53c152cc953c3936206cc141deab65",
+ "written_utc": "2026-10-01T05:43:49Z",
+ "plan": {
+  "version": "FS2-1",
+  "family": "A (3-SAT, n=16, ratio 4.0); all other settings as in the reported study",
+  "primary_metric": "faith_excess_id (density-controlled clause-F1 excess, ID split, final model)",
+  "designs": {
+   "C1_convergence": {
+    "conditions": [
+     "coformer",
+     "frozen"
+    ],
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "epochs": 48,
+    "note": "4x the calibrated budget (12 epochs); same cosine schedule stretched to 48 epochs; the FINAL model is evaluated (no early stopping, no model selection); learning curve of the ID excess on the first 512 ID instances every 6 epochs (reporting only)"
+   },
+   "C2_rl": {
+    "estimator": "RLOO score-function gradient (4 formula samples per instance from the translator's per-slot categorical distribution; leave-one-out baseline); no gradient passes through any solver",
+    "reward": "class-balanced agreement between the EXACT entailment labels of the sampled formula and the gold labels over the instance's queries (label True/False/Unknown as in the follow-up study; weights = inverse gold-label frequency over the training set); exact labels by exhaustive enumeration of the 2^16 assignments",
+    "loss": "task_weight * -(advantage * log-probability of the sampled formula, i.e. the sum over its slots; standard REINFORCE/RLOO), averaged over samples and instances; task_weight = 1; per-slot loss, density hinge and logit penalty as in `frozen`",
+    "runs": {
+     "rl_ans_ps[Q=1]": {
+      "faith_fraction": 0.005,
+      "queries": 1,
+      "seeds": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11
+      ],
+      "note": "same single query per instance as A1/A2"
+     },
+     "rl_ans_ps[Q=16]": {
+      "faith_fraction": 0.005,
+      "queries": 16,
+      "seeds": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "note": "one query per variable, polarity from default_rng(1)"
+     },
+     "rl_ans[Q=16]": {
+      "faith_fraction": 0.0,
+      "queries": 16,
+      "seeds": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ],
+      "note": "answers only, no per-slot supervision"
+     }
+    }
+   },
+   "C3_shuffled_answers": {
+    "condition": "ans_st_ps",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "labels": "the follow-up study's answer labels permuted across training instances (numpy default_rng(2)); class weights unchanged",
+    "note": "tests whether the A2 harm comes from the answer content or from adding a loss"
+   }
+  },
+  "confirmatory": {
+   "C1": {
+    "a": "coformer[48 ep]",
+    "b": "frozen[48 ep]",
+    "direction": "greater",
+    "claim": "with training to convergence, routing the solver gradient improves ID excess under scarce per-slot supervision"
+   },
+   "C2": {
+    "a": "rl_ans_ps[Q=1]",
+    "b": "frozen (stored partial-supervision run, f=0.005)",
+    "direction": "greater",
+    "claim": "answer feedback from an exact solver without differentiation improves ID excess under scarce per-slot supervision"
+   },
+   "C3": {
+    "a": "ans_st_ps with shuffled labels",
+    "b": "ans_st_ps (stored follow-up run A2)",
+    "direction": "greater",
+    "claim": "the A2 harm is caused by the answer content: shuffled labels harm less"
+   }
+  },
+  "confirmatory_rule": "one-sided exact sign-flip permutation test on the 12 per-seed differences (all 2^12 sign patterns); Holm over {C1, C2, C3} at alpha = 0.05; SUPPORTED iff Holm-adjusted p < 0.05 AND mean difference >= 0.03",
+  "secondary": "success indicator (faith_excess_id > 0.30): exact one-sided McNemar; hurdle summary (success counts; mean excess of successful and failed runs); non-superiority: a benefit >= 0.03 is excluded iff the upper limit of the t-based 90% interval of the mean difference is < 0.03",
+  "convergence_criterion": "C1 is called converged if, averaged over seeds, the ID excess on the first 512 ID instances changes by less than 0.02 between epochs 36 and 48 in both conditions",
+  "diagnostic": "rl_ans_ps[Q=16] vs frozen and vs rl_ans_ps[Q=1] (seeds 0-5); rl_ans[Q=16] vs the follow-up study's A1 runs (seeds 0-5); estimates with 95% t intervals and exact two-sided sign-flip p-values, no verdicts",
+  "order": "C3, C2 (Q=1), C1, C2 (Q=16 designs)",
+  "stage_flags": [
+   "RUN_FS2_C1",
+   "RUN_FS2_C2",
+   "RUN_FS2_C3"
+  ]
+ }
+}

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+CoFormer_run/
+CoFormer_run_unpack_tmp/
+logs/
+*.zip

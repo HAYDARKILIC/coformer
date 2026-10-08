@@ -1,0 +1,6 @@
+CoFormer-coformer: abstains on >95% of the holdout: its accuracy is the Unknown-class rate, not evidence of reasoning (abstain_rate=0.99)
+CoFormer-frozen: abstains on >95% of the holdout: its accuracy is the Unknown-class rate, not evidence of reasoning (abstain_rate=1.00)
+CoFormer-no_faith: abstains on >95% of the holdout: its accuracy is the Unknown-class rate, not evidence of reasoning (abstain_rate=1.00)
+CoFormer-no_stgs: abstains on >95% of the holdout: its accuracy is the Unknown-class rate, not evidence of reasoning (abstain_rate=1.00)
+CoFormer-soft_frozen: abstains on >95% of the holdout: its accuracy is the Unknown-class rate, not evidence of reasoning (abstain_rate=1.00)
+only 44% of training examples had a grounded conclusion, so the label signal reached the translator on a minority of the data

@@ -1,0 +1,7 @@
+faith_id,acc_id,case,translation_matches_gold,instance_solved,error_type
+1.0,0.317,0,True,True,correct
+1.0,0.317,1,True,False,"refine_failure(trans OK, answer wrong)"
+1.0,0.317,2,True,True,correct
+1.0,0.317,3,True,True,correct
+1.0,0.317,4,True,False,"refine_failure(trans OK, answer wrong)"
+1.0,0.317,5,True,True,correct

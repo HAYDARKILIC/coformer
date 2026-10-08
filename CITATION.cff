@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the article."
+title: "CoFormer: code, data, tables and figures"
+license: MIT
+repository-code: "https://github.com/HAYDARKILIC/coformer"
+authors:
+  - family-names: Kilic
+    given-names: Haydar
+    affiliation: Ostim Technical University
+    orcid: "https://orcid.org/0000-0002-2551-3772"
+preferred-citation:
+  type: article
+  title: "Does a Differentiable Solver Teach Autoformalisation? A Controlled Study of Co-Training through a Relaxed MaxSAT Layer"
+  authors:
+    - family-names: Kilic
+      given-names: Haydar
+  journal: "Journal of Artificial Intelligence Research"
+  status: submitted

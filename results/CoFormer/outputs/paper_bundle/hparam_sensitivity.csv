@@ -1,0 +1,12 @@
+knob,value,faith_id,faith_excess,acc_id,acc_para
+gumbel_tau_end,0.3,1.0,0.906,0.317,0.001
+gumbel_tau_end,0.5,1.0,0.906,0.317,0.001
+gumbel_tau_end,0.8,1.0,0.906,0.317,0.001
+refine_steps,10.0,1.0,0.906,0.075,0.001
+refine_steps,20.0,1.0,0.906,0.148,0.002
+refine_steps,30.0,1.0,0.906,0.217,0.0
+refine_steps,50.0,1.0,0.906,0.317,0.001
+refine_steps,100.0,1.0,0.906,0.427,0.002
+refine_steps[no_stgs],50.0,1.0,0.906,0.317,0.0
+refine_steps[no_stgs],100.0,1.0,0.906,0.427,0.002
+refine_steps[no_stgs],200.0,1.0,0.906,0.493,0.001

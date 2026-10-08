@@ -1,0 +1,7 @@
+condition,trained_refine_steps,train_secs
+frozen,43.68,762.78
+coformer,43.68,804.02
+no_faith,1.0,802.71
+no_stgs,43.68,803.44
+soft_frozen,43.68,762.57
+soft_no_faith,17.92,802.45

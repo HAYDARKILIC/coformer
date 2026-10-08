@@ -1,0 +1,21 @@
+{
+ "selected_level": 3,
+ "pilot": [
+  {
+   "level": 1,
+   "share": 1.0,
+   "in_band": false
+  },
+  {
+   "level": 2,
+   "share": 0.9999402867189311,
+   "in_band": false
+  },
+  {
+   "level": 3,
+   "share": 1.0,
+   "in_band": false
+  }
+ ],
+ "famh_sha256": "84f249584936c2a08fd561bfe4bf1345474ec3ef23336ab6c7392ecde44eea52"
+}

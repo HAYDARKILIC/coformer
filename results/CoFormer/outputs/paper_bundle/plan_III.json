@@ -1,0 +1,177 @@
+{
+ "sha256": "7eeccd20da40c106da4b3c37d7708f95221357e4f92191be7b0ccb3400cf9ea6",
+ "written_utc": "2026-09-26T16:12:13Z",
+ "plan": {
+  "version": "III-1",
+  "family": "A (3-SAT, n=16, ratio 4.0); all other settings as in the reported study",
+  "primary_metric": "faith_excess_id (density-controlled clause-F1 excess, ID split)",
+  "comparators": "stored runs of the reported study (partial-supervision matrix at f=0.005, main matrix), which share code, data, seeds and supervised subsets",
+  "answer_supervision": {
+   "labels": "for each training instance one conclusion literal (variable uniform, polarity uniform; numpy default_rng(0)), labelled True / False / Unknown by the complete DPLL solver of Cell 5 (F entails c / F entails not-c / neither)",
+   "loss": "cross-entropy of kappa*(D, -D, mu - |D|) with D = (m+1)*(S(C+c) - S(C+not c)), where S is the relaxed layer's mean clause satisfaction on the emitted formula augmented with the unit clause; kappa = 4, mu = 0.5; class weights = inverse label frequency",
+   "rationale": "the natural-language surrogate uses the unscaled difference, which is bounded by 1/(m+1) and makes Unknown the arg-max by construction; the (m+1) rescaling removes that bound. mu was fixed on GOLD formulas of 1,000 training instances before any Plan III training (balanced accuracy of the surrogate's arg-max on gold formulas 0.61 at mu = 0.5, against 0.33 for chance). Label shares on the full training set: True 0.236, False 0.243, Unknown 0.521",
+   "no_anchored_task_loss": true
+  },
+  "confirmatory": {
+   "A2_ST": {
+    "a": "ans_st_ps",
+    "b": "frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "direction": "greater",
+    "note": "answers through the solver on all instances + per-slot supervision on 100 instances, vs per-slot supervision only"
+   },
+   "A2_soft": {
+    "a": "ans_soft_ps",
+    "b": "soft_frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "direction": "greater",
+    "note": "as A2_ST with the soft bridge"
+   }
+  },
+  "confirmatory_rule": "one-sided exact sign-flip permutation test on the per-seed differences (all 2^12 sign patterns); Holm over {A2_ST, A2_soft} at alpha = 0.05; SUPPORTED iff Holm-adjusted p < 0.05 AND mean difference >= 0.03",
+  "secondary_confirmatory": "success indicator (faith_excess_id > 0.30): exact one-sided McNemar; non-superiority: a benefit >= 0.03 is excluded iff the upper limit of the t-based 90% interval of the mean difference is < 0.03",
+  "diagnostic": {
+   "A1_ST": {
+    "a": "ans_st",
+    "faith_fraction": 0.0,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "compare": "no_faith (gold formula through the anchored loss)"
+   },
+   "A1_soft": {
+    "a": "ans_soft",
+    "faith_fraction": 0.0,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "compare": "soft_no_faith"
+   },
+   "K_ST": {
+    "a": "coformer[K=T=50]",
+    "b": "frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "K_soft": {
+    "a": "no_stgs[K=T=50]",
+    "b": "soft_frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "W_ST": {
+    "a": "coformer[task weight 5]",
+    "b": "frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "W_soft": {
+    "a": "no_stgs[task weight 5]",
+    "b": "soft_frozen",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   "B_ST": {
+    "a": "coformer[2x epochs]",
+    "b": "frozen[2x epochs]",
+    "faith_fraction": 0.005,
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "extra": "learning curves at every 3rd epoch"
+   },
+   "D": {
+    "systems": [
+     "Direct-frozen",
+     "CoT-frozen"
+    ],
+    "seeds": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "compare": "SATLM-frozen, LogicLM-frozen, majority floor; accuracy and abstention"
+   }
+  },
+  "diagnostic_rule": "estimates with 95% t intervals, exact two-sided sign-flip p-values and minimum detectable differences; no verdicts (6 seeds cannot reach significance after correction)",
+  "stage_flags": [
+   "RUN_PLAN_III_A2",
+   "RUN_PLAN_III_A1",
+   "RUN_PLAN_III_KW",
+   "RUN_PLAN_III_BUDGET",
+   "RUN_PLAN_III_NL"
+  ]
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "0": {
+  "n": 160,
+  "acc": 0.575,
+  "fallback": 0.36875,
+  "acc_strict": 0.45625,
+  "acc_parsed_only": 0.7227722772277227,
+  "n_parsed": 101,
+  "direct_acc": 0.4125,
+  "unknown_share": 0.3,
+  "fallback_and_gold_unknown": 0.11875
+ },
+ "1": {
+  "n": 160,
+  "acc": 0.5875,
+  "fallback": 0.35625,
+  "acc_strict": 0.475,
+  "acc_parsed_only": 0.7378640776699029,
+  "n_parsed": 103,
+  "direct_acc": 0.44375,
+  "unknown_share": 0.3,
+  "fallback_and_gold_unknown": 0.1125
+ },
+ "2": {
+  "n": 160,
+  "acc": 0.625,
+  "fallback": 0.34375,
+  "acc_strict": 0.5,
+  "acc_parsed_only": 0.7619047619047619,
+  "n_parsed": 105,
+  "direct_acc": 0.4625,
+  "unknown_share": 0.2625,
+  "fallback_and_gold_unknown": 0.125
+ },
+ "3": {
+  "n": 160,
+  "acc": 0.7,
+  "fallback": 0.39375,
+  "acc_strict": 0.4875,
+  "acc_parsed_only": 0.8041237113402062,
+  "n_parsed": 97,
+  "direct_acc": 0.45,
+  "unknown_share": 0.40625,
+  "fallback_and_gold_unknown": 0.2125
+ }
+}

@@ -1,0 +1,5 @@
+n=46
+raw_mean=0.0074
+cotrained_mean=0.0107
+delta=0.0033
+ci=[-0.0069,0.0147]

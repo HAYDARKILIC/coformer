@@ -1,0 +1,5 @@
+n=80
+majority=0.3625
+zero_shot=0.4750
+premise_ablated=0.3875
+verdict=LOW leakage risk: near the floor with and without premises; gains from co-training are attributable to the method.

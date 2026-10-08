@@ -1,0 +1,6 @@
+# Environment in which analysis/ regenerated the committed tables and figures (CPU is sufficient).
+numpy==2.1.3
+pandas==2.2.3
+scipy==1.14.1
+matplotlib==3.9.2
+torch==2.14.0  # CPU build is sufficient; used by analysis/solver_checks.py

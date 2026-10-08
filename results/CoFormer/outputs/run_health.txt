@@ -1,0 +1,31 @@
+HEALTH CHECK
+[LIMIT] `no_faith` is information-free, degenerate, zero seed variance  (an ablation; bounds interpretation, does not invalidate the main contrast)
+[OK] reached the ceiling (solved, not collapsed): frozen, coformer, no_stgs, soft_frozen
+[OK] best csat_norm = 0.876 (chance = 0)
+[OK] results matrix complete (72/72)
+[LIMIT] hypotheses not computable: H1, H2, H4, H5, H7, H8, H9 -- report as untested, not as null results
+[OK] achieved power 0.83 at d=0.8 with 12 seeds
+[OK] Part C real-benchmark evidence present
+[OK] factorial complete: bridge and solver gradient are separately identified
+[OK] negative control on `no_stgs` passed (shuffled 0.000 vs real 1.000)
+[OK] negative control on `coformer` passed (shuffled 0.000 vs real 1.000)
+[OK] reproduced across instance families A, B
+[LIMIT] contrasts excluded as not testable at this seed budget: H1, H2, H4, H5, H7, H8, H9 -- reported as untestable, never as null results
+
+VERDICT: HEALTHY WITH SCOPED LIMITATIONS -- claims stand, bounded by the items marked LIMIT/WARN
+
+Claims:
+ - Gradient probe [task]: straight-through vs soft-relaxation cosine +0.630 (range +0.489 to +0.725), norm ratio 1.390; the straight-through update is aligned with the relaxed gradient.
+ - Gradient probe [task+faith]: straight-through vs soft-relaxation cosine +1.000 (range +1.000 to +1.000), norm ratio 1.000; the straight-through update is aligned with the relaxed gradient.
+ - Confirmatory hypotheses supported after Holm correction: none (coformer - frozen: faithfulness +0.000, end-task +0.000).
+ - Degeneracy audit: `no_faith` collapsed and is excluded from interpretation; emitted literal density 0.19 (full model) vs gold 0.19.
+ - Achieved power with 12 seeds: 0.83 at d=0.8, 0.49 at d=0.5.
+ - Mean training cost 804s per run on NVIDIA A100-SXM4-40GB.
+ - Relative ID->OOD degradation: +0.668 (CoFormer) vs +0.643 (detached); lower = more robust [H3].
+
+Bounded by:
+ - `no_faith` is information-free, degenerate, zero seed variance  (an ablation; bounds interpretation, does not invalidate the main contrast)
+ - hypotheses not computable: H1, H2, H4, H5, H7, H8, H9 -- report as untested, not as null results
+ - contrasts excluded as not testable at this seed budget: H1, H2, H4, H5, H7, H8, H9 -- reported as untestable, never as null results
+
+Bundle: /content/drive/MyDrive/CoFormer/outputs/coformer_paper_bundle.zip

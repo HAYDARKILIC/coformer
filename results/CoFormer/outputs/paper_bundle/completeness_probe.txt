@@ -1,0 +1,4 @@
+verified_unsat=100
+layer_flagged=81
+rate=0.8100
+mean_min_sat=0.4308

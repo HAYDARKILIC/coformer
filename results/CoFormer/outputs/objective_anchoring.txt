@@ -1,0 +1,2 @@
+corr_self=0.2271
+corr_anchored=-0.9962

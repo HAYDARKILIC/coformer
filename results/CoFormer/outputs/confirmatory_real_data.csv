@@ -1,0 +1,7 @@
+hyp,metric,mean_diff,p_raw,cohen_d,d_CI,d_note,family,testability,p_floor,note,n_seeds,p_holm,verdict
+R0,accuracy,-0.0016,0.6336,-0.5,"[-1.50,0.00]",,excluded (floored),floored,0.6328,"4/4 differences share a sign or are tied, so the attainable p is bounded below by 0.633 > alpha=0.05",4,,
+R1,accuracy,-0.0969,0.0,-3.437,"[-24.50,-2.94]",,confirmatory,testable,0.0,,4,0.0,not supported
+R2,accuracy,0.0,1.0,0.0,"[-0.87,1.50]",,excluded (floored),floored,0.125,"3/4 differences share a sign or are tied, so the attainable p is bounded below by 0.125 > alpha=0.05",4,,
+R3,acc_proofwriter,-0.0002,0.9778,-0.014,"[-0.87,24.30]",,excluded (floored),floored,0.125,"3/4 differences share a sign or are tied, so the attainable p is bounded below by 0.125 > alpha=0.05",4,,
+R0b,acc_proofwriter,-0.0021,0.6336,-0.5,"[-1.50,0.00]",,exploratory,floored,0.6328,"4/4 differences share a sign or are tied, so the attainable p is bounded below by 0.633 > alpha=0.05",4,,
+R4,acc_folio,0.0,1.0,0.0,"[0.00,0.00]",,exploratory,vacuous,1.0,"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",4,,

@@ -1,0 +1,11 @@
+metric,contrast,share,ci,n_seeds,note
+faithfulness (density-controlled),coformer >= no_faith,1.0,"[1.00,1.00]",12,ablation is degenerate or information-free (contrast uninterpretable)
+faithfulness (density-controlled),coformer >= no_stgs,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+faithfulness (density-controlled),coformer >= frozen,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+faithfulness (density-controlled),coformer >= soft_frozen,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+faithfulness (density-controlled),coformer >= soft_no_faith,1.0,"[1.00,1.00]",12,
+end-task csat_norm,coformer >= no_faith,1.0,"[1.00,1.00]",12,ablation is degenerate or information-free (contrast uninterpretable)
+end-task csat_norm,coformer >= no_stgs,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+end-task csat_norm,coformer >= frozen,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+end-task csat_norm,coformer >= soft_frozen,1.0,"[1.00,1.00]",12,ABLATION AT THE CEILING -- this contrast FALSIFIES H6
+end-task csat_norm,coformer >= soft_no_faith,1.0,"[1.00,1.00]",12,

@@ -1,0 +1,9 @@
+hypothesis,metric,mean_diff,p_raw,cohen_d,d_CI,d_note,direction,n_seeds,testability,p_floor,verdict,status,p_holm
+H1,faith_excess_id,0.0,1.0,0.0,"[0.00,0.00]",,greater,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H2,csat_norm_id,0.0,1.0,0.0,"[0.00,0.00]",,greater,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H3,ood_rel_drop,0.0259,0.1334,0.433,"[-0.13,1.99]",,less,12,testable,0.0,not supported,,0.1334
+H4,refine_steps,0.0,1.0,0.0,"[0.00,0.00]",,less,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H5,error_wrong_translation,0.0,1.0,0.0,"[0.00,0.00]",,less,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H7,faith_excess_id,0.0,1.0,0.0,"[0.00,0.00]",,greater,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H8,faith_excess_id,0.0,1.0,0.0,"[0.00,0.00]",,greater,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",
+H9,faith_excess_id,0.0,1.0,0.0,"[0.00,0.00]",,greater,12,vacuous,1.0,NOT TESTABLE (vacuous),"identically zero difference vector: the two systems produced the same output on every unit, so the bootstrap cannot reject",

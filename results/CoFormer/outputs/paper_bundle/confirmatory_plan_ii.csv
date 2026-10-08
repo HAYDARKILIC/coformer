@@ -1,0 +1,10 @@
+family,hypothesis,n,status,p_floor,mean_diff,p,dz,ci_lo,ci_hi,right_direction,meets_min_effect,p_holm,verdict
+E (estimator replication),E1: grs_routed vs coformer on csat_norm_paraphrase,12,testable,0.0,0.0256,0.0372,0.522,0.0013,0.0534,True,False,0.1116,not supported
+E (estimator replication),E2: grs_frozen vs frozen on csat_norm_paraphrase,12,testable,0.0,0.0113,0.193,0.348,-0.0053,0.0294,True,False,0.193,not supported
+E (estimator replication),E3: grs_routed vs coformer on ood_rel_drop,12,testable,0.0001,-0.0332,0.0734,-0.455,-0.0745,0.0023,True,True,0.1468,not supported
+P (partial supervision),P_ST @ f=0.001: coformer vs frozen,12,testable,0.0005,0.0056,0.6624,0.136,-0.0151,0.0297,True,False,1.0,not supported
+P (partial supervision),P_SOFT @ f=0.001: no_stgs vs soft_frozen,12,testable,0.0005,-0.0004,0.8766,-0.046,-0.0047,0.0038,False,False,1.0,not supported
+P (partial supervision),P_ST @ f=0.005: coformer vs frozen,12,testable,0.0005,0.0815,0.3994,0.226,-0.116,0.2706,True,True,1.0,not supported
+P (partial supervision),P_SOFT @ f=0.005: no_stgs vs soft_frozen,12,testable,0.0001,-0.0166,0.8494,-0.063,-0.1633,0.1182,False,False,1.0,not supported
+P (partial supervision),P_ST @ f=0.02: coformer vs frozen,12,testable,0.0001,-0.0334,0.3864,-0.251,-0.1033,0.0416,False,True,1.0,not supported
+P (partial supervision),P_SOFT @ f=0.02: no_stgs vs soft_frozen,12,testable,0.0001,-0.0064,0.848,-0.057,-0.0666,0.0525,False,False,1.0,not supported

@@ -1,0 +1,1 @@
+backbone `Qwen/Qwen2.5-7B-Instruct` failed to load: ModuleNotFoundError: No module named 'transformers.models.audioflamingo3'
